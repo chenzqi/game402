@@ -162,10 +162,13 @@ powershell -ExecutionPolicy Bypass -File .\fetch-ipa.ps1 -Token ghp_你的GitHub
 | --- | --- |
 | 文件 | `SpaceShooter-unsigned.ipa`（**已经在本目录里**） |
 | 大小 | 257241 字节 |
-| SHA-256 | `993845c9baf14bd0b3932272e06109823df0673cfe155663dacf271dbe4cad36` |
+| SHA-256 | `32925cba329d4f67c09250e8eb0e0dcbb42241f1e7a28a12ce635a0863a6ddc7` |
 | 内嵌游戏 | 与仓库里的 `太空打飞机-iPhone版.html` **逐字节一致**（75870 字节） |
 | 可执行文件 | arm64 Mach-O（真机架构），最低系统 iOS 13.0 |
 | 签名状态 | 未签名（由 Sideloadly 用你的 Apple ID 现场签） |
+
+> 说明：每次云端重新构建，zip 内部时间戳会变，哈希也会跟着变。上表是本目录这一份的值；
+> 以后重新下载时，**以 Releases 页面说明里写的 SHA-256 为准**（构建脚本会自动写进去）。
 
 自己核对一下（PowerShell）：
 
