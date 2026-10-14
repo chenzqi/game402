@@ -9,6 +9,9 @@ name: 构建 iOS .ipa
 on:
   push:
     branches: [ main, master ]
+    paths-ignore:
+      - "**.md"
+      - ".gitignore"
   workflow_dispatch:
 
 permissions:
@@ -118,11 +121,20 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -uo pipefail
-          gh release create ios-ipa-latest \
-            --title "太空打飞机 iPhone 版（最新 .ipa）" \
-            --notes "未签名 .ipa，用 Sideloadly / AltStore / 爱思助手 自签安装。免费 Apple ID 签名 7 天有效。" \
-            2>/dev/null || true
+          SHA="$(shasum -a 256 ios/build/SpaceShooter-unsigned.ipa | cut -d' ' -f1)"
+          SIZE="$(stat -f%z ios/build/SpaceShooter-unsigned.ipa)"
+          {
+            echo "未签名 .ipa：用 Sideloadly / AltStore / 爱思助手 自签安装；免费 Apple ID 签的 7 天有效。"
+            echo ""
+            echo "- 文件名：SpaceShooter-unsigned.ipa"
+            echo "- 大小：${SIZE} 字节"
+            echo "- SHA-256：${SHA}"
+            echo "- 直链：https://github.com/${GITHUB_REPOSITORY}/releases/download/ios-ipa-latest/SpaceShooter-unsigned.ipa"
+          } > ios/build/release-notes.md
+          gh release create ios-ipa-latest --title "太空打飞机 iPhone 版（最新 .ipa）" --notes-file ios/build/release-notes.md 2>/dev/null || true
           gh release upload ios-ipa-latest ios/build/SpaceShooter-unsigned.ipa --clobber
+          gh release edit ios-ipa-latest --title "太空打飞机 iPhone 版（最新 .ipa）" --notes-file ios/build/release-notes.md
+          echo "SHA-256 = ${SHA}"
           echo "直链：https://github.com/${GITHUB_REPOSITORY}/releases/download/ios-ipa-latest/SpaceShooter-unsigned.ipa"
       - name: 写构建摘要
         if: always()
