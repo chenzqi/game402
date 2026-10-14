@@ -1,0 +1,61 @@
+# ============================================================================
+# 推送代码 → GitHub 的 macOS 机器自动把 iOS 工程打成 .ipa，可在 Actions 页下载
+# 得到的是「未签名 ipa」，用 Sideloadly / AltStore 自签即可装到 iPhone。
+# ============================================================================
+name: 构建 iOS .ipa
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-ipa:
+    name: 云端构建 .ipa
+    runs-on: macos-14
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 显示工具链版本
+        run: |
+          xcodebuild -version
+          sw_vers
+
+      - name: 安装 XcodeGen
+        run: brew install xcodegen
+
+      - name: 生成 Xcode 工程
+        working-directory: ios
+        run: xcodegen generate
+
+      - name: 构建（不签名）
+        working-directory: ios
+        run: |
+          xcodebuild \
+            -project SpaceShooter.xcodeproj \
+            -target SpaceShooter \
+            -configuration Release \
+            -sdk iphoneos \
+            SYMROOT=build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
+            build
+
+      - name: 打包成 .ipa
+        working-directory: ios
+        run: |
+          set -e
+          APP="build/Release-iphoneos/SpaceShooter.app"
+          test -d "$APP"
+          rm -rf build/Payload
+          mkdir -p build/Payload
+          cp -R "$APP" build/Payload/
+          ( cd build && zip -qry SpaceShooter-unsigned.ipa Payload )
+          ls -lh build/SpaceShooter-unsigned.ipa
+
+      - name: 上传 .ipa（在 Actions 页面下载）
+        uses: actions/upload-artifact@v4
+        with:
+          name: SpaceShooter-ipa
+          path: ios/build/SpaceShooter-unsigned.ipa
+          if-no-files-found: error

@@ -1,0 +1,144 @@
+/* ===== 太空打飞机 · 样式 ===== */
+:root{
+  --bg:#04060f;
+  --panel:rgba(255,255,255,.045);
+  --panel-2:rgba(255,255,255,.08);
+  --line:rgba(255,255,255,.12);
+  --text:#e8eefb;
+  --muted:#8b9bb4;
+  --accent:#38bdf8;
+  --accent-2:#a855f7;
+  --warn:#fb7185;
+  --radius:14px;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:"Segoe UI","PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+  background:
+    radial-gradient(900px 620px at 50% -12%, #14224d 0%, transparent 62%),
+    radial-gradient(760px 520px at 100% 105%, #2b1046 0%, transparent 58%),
+    linear-gradient(180deg,#060a16 0%, var(--bg) 100%);
+  background-attachment:fixed;
+  display:flex;
+  justify-content:center;
+  padding:16px 14px 24px;
+  -webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+}
+
+.app{ width:100%; max-width:920px; display:flex; flex-direction:column; gap:12px; }
+
+/* ---------------- 顶栏 ---------------- */
+.topbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.topbar h1{ margin:0; font-size:20px; letter-spacing:.05em; display:flex; align-items:baseline; gap:8px; }
+.topbar h1 .dot{ color:var(--accent); }
+.topbar h1 em{ font-style:normal; font-size:11.5px; letter-spacing:.3em; color:var(--muted); }
+.actions{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+
+/* ---------------- 按钮 ---------------- */
+.primary-btn{
+  cursor:pointer; border:0; border-radius:11px; padding:11px 26px; font-size:15px; font-weight:700;
+  color:#04121a; background:linear-gradient(135deg,#7dd3fc,#38bdf8 45%,#a855f7);
+  box-shadow:0 8px 22px rgba(56,189,248,.3); transition:.16s;
+}
+.primary-btn:hover{ filter:brightness(1.08); transform:translateY(-1px); }
+.primary-btn:active{ transform:translateY(0); }
+
+.ghost-btn{
+  cursor:pointer; border:1px solid var(--line); background:var(--panel); color:var(--text);
+  padding:7px 12px; border-radius:10px; font-size:12.5px; transition:.16s; white-space:nowrap;
+}
+.ghost-btn:hover{ background:var(--panel-2); border-color:rgba(56,189,248,.5); }
+.ghost-btn:active{ transform:translateY(1px); }
+
+.switch{ display:inline-flex; align-items:center; gap:6px; font-size:12.5px; color:var(--muted); cursor:pointer; }
+.switch input{ accent-color:var(--accent); width:15px; height:15px; cursor:pointer; }
+
+kbd{
+  display:inline-block; min-width:18px; padding:1px 5px; margin:0 1px; font-size:10.5px; text-align:center;
+  font-family:inherit; color:var(--text); background:rgba(255,255,255,.08);
+  border:1px solid var(--line); border-bottom-width:2px; border-radius:5px;
+}
+
+/* ---------------- 布局 ---------------- */
+.stage{ display:grid; grid-template-columns:minmax(0,1fr) 250px; gap:14px; align-items:start; }
+
+.board-col{ min-width:0; display:flex; justify-content:center; }
+
+.board-wrap{
+  position:relative;
+  width:fit-content; max-width:100%; margin:0 auto;
+  padding:8px; border-radius:18px;
+  background:linear-gradient(160deg, rgba(56,189,248,.35), rgba(168,85,247,.3));
+  box-shadow:0 0 46px rgba(56,189,248,.18), 0 18px 42px rgba(0,0,0,.55);
+}
+
+canvas#game{
+  display:block; max-width:100%; border-radius:12px; background:#04060f;
+  touch-action:none; cursor:crosshair;
+}
+
+/* 覆盖层 */
+.overlay{
+  position:absolute; inset:8px; border-radius:12px; z-index:3;
+  background:rgba(4,7,16,.88); backdrop-filter:blur(3px);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:10px; text-align:center; padding:20px; transition:opacity .22s;
+}
+.overlay.hidden{ opacity:0; pointer-events:none; }
+.overlay h2{ margin:0; font-size:23px; letter-spacing:.05em; }
+.overlay h2.warn{ color:var(--warn); }
+.overlay p{ margin:0; font-size:12.5px; color:var(--muted); line-height:1.65; }
+.overlay .tiny{ font-size:11.5px; }
+.overlay .keys{ display:flex; flex-direction:column; gap:5px; margin:4px 0; font-size:12px; color:var(--muted); }
+
+/* 侧栏 */
+.side{ display:flex; flex-direction:column; gap:12px; min-width:0; }
+.box{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:12px; backdrop-filter:blur(6px);
+}
+.box h2{ margin:0 0 10px; font-size:11.5px; letter-spacing:.16em; color:var(--muted); font-weight:600; }
+
+.stats{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.stat{
+  background:var(--panel); border:1px solid var(--line); border-radius:11px;
+  padding:7px 9px; display:flex; flex-direction:column; gap:3px;
+}
+.stat span{ font-size:11px; color:var(--muted); }
+.stat b{ font-size:16px; font-variant-numeric:tabular-nums; }
+.stat b.accent{ color:var(--accent); }
+
+.tips{ margin:0; padding-left:16px; font-size:12px; color:var(--muted); line-height:1.85; }
+.tips b{ color:var(--text); }
+
+.footnote{ font-size:11.5px; color:var(--muted); line-height:1.9; }
+
+/* 触屏按键 */
+.touchbar{ display:none; grid-template-columns:repeat(4,1fr); gap:8px; }
+.touchbar button{
+  padding:14px 0; font-size:14px; color:var(--text); background:var(--panel);
+  border:1px solid var(--line); border-radius:12px; cursor:pointer; user-select:none; touch-action:manipulation;
+}
+.touchbar button:active{ background:rgba(56,189,248,.2); border-color:var(--accent); }
+
+/* ---------------- 响应式 ---------------- */
+@media (max-width:860px){
+  .stage{ grid-template-columns:1fr; }
+  .side{ flex-direction:row; }
+  .side .box{ flex:1 1 0; }
+  .touchbar{ display:grid; }
+  .tips{ display:none; }
+}
+@media (max-width:600px){
+  body{ padding:10px 8px 18px; }
+  .topbar h1 em{ display:none; }
+  .side{ flex-direction:column; }
+  .overlay .keys{ font-size:11px; }
+  .overlay h2{ font-size:19px; }
+}

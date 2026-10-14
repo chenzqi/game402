@@ -1,0 +1,109 @@
+/* ==========================================================================
+   太空打飞机 · iOS / iPhone 适配层
+   --------------------------------------------------------------------------
+   只做"把网页变成能装在 iPhone 上的 App"所需的补充，**不改动任何玩法逻辑**：
+     · 刘海 / 灵动岛 / Home 指示条安全区
+     · 动态视口高度（Safari 工具栏 / 全屏切换）
+     · 禁止长按菜单、划词选中、双击缩放、橡皮筋回弹
+     · 竖屏单屏布局：画布自动吃掉剩余空间，玩的时候不用滚动
+   本文件加载在 style.css 之后，同名规则以本文件为准。
+   ========================================================================== */
+
+html{ height:100%; -webkit-text-size-adjust:100%; }
+
+/* 禁止橡皮筋回弹 / 长按选中 / 长按弹出菜单 / 点击高亮 */
+html,body{
+  overscroll-behavior:none;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+  -webkit-tap-highlight-color:transparent;
+  overflow-x:hidden;
+}
+
+body{
+  min-height:100vh;
+  min-height:100dvh;                 /* iOS 15.4+：跟随可视区变化（老系统自动退回 100vh） */
+  background-attachment:scroll;      /* iOS 上 fixed 背景会拖慢合成 */
+  padding:calc(6px + env(safe-area-inset-top)) calc(8px + env(safe-area-inset-right))
+          calc(6px + env(safe-area-inset-bottom)) calc(8px + env(safe-area-inset-left));
+}
+
+/* --------------------------------------------------------------------------
+   画布：宽高交给 CSS，按 480×720 等比缩小。
+   canvas 是"有固有比例的替换元素"，配合 max-width/max-height 会自动保持比例；
+   aspect-ratio 供新系统使用。JS 设置的画布缓冲仍是 480×720 × DPR，依旧清晰；
+   输入的坐标换算走 getBoundingClientRect()，所以手感与显示尺寸无关。
+   -------------------------------------------------------------------------- */
+canvas#game{
+  width:auto !important;
+  height:auto !important;
+  max-width:100%;
+  max-height:100%;
+  aspect-ratio:480 / 720;
+  -webkit-user-drag:none;
+}
+
+/* ---------------- 紧凑化：把非游戏区压到最小 ---------------- */
+.topbar{ gap:6px; }
+.topbar h1{ font-size:15px; }
+.topbar h1 em{ display:none; }          /* 手机上省掉 SPACE SHOOTER 副标题 */
+.actions{ gap:5px; }
+.ghost-btn{ padding:6px 9px; font-size:11.5px; }
+.switch{ font-size:11.5px; gap:4px; }
+.switch input{ width:15px; height:15px; }
+
+.box{ padding:7px; }
+.box h2{ margin:0 0 4px; font-size:9.5px; }
+
+/* 战绩压成一行 6 格 */
+.stats{ grid-template-columns:repeat(6,1fr); gap:4px; }
+.stat{ padding:4px 1px; align-items:center; gap:0; }
+.stat span{ font-size:9px; letter-spacing:0; white-space:nowrap; }
+.stat b{ font-size:13px; }
+
+.touchbar{ gap:5px; }
+.touchbar button{ padding:12px 0; font-size:15px; border-radius:12px; }
+
+/* 窄屏时原样式已隐藏「玩法提示」列表，这里顺带隐藏这个空盒子；
+   底部键盘说明在 iPhone 上用处不大，隐藏以免挤占操作区。 */
+@media (max-width:700px){
+  .side .box:nth-child(2){ display:none; }
+  .footnote{ display:none; }
+}
+
+/* --------------------------------------------------------------------------
+   竖屏：整页固定一屏 —— 顶栏 / 战绩 / 触控条按内容高度，
+   画布占满剩余空间（横向与纵向都受 max-* 约束，自动保持比例、绝不溢出）
+   -------------------------------------------------------------------------- */
+@media (orientation:portrait){
+  html,body{ height:100%; overflow:hidden; }
+  .app{
+    /* 减去 body 上下固定内边距 12px 与安全区，保证整页正好一屏 */
+    height:calc(100vh - 12px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    height:calc(100dvh - 12px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .topbar,.touchbar,.side{ flex:0 0 auto; }
+  .stage{
+    flex:1 1 auto; min-height:0; align-items:stretch;
+    display:flex; flex-direction:column; gap:8px;
+  }
+  .board-col{ flex:1 1 auto; min-height:0; min-width:0; display:flex; }
+  .board-wrap{
+    flex:1 1 auto; min-height:0; min-width:0;
+    display:flex; align-items:center; justify-content:center;
+    /* 画布随剩余空间自适应，霓虹边框改画在画布上，外框不再占地 */
+    background:none; box-shadow:none; padding:0;
+  }
+  canvas#game{
+    border-radius:12px;
+    border:2px solid rgba(56,189,248,.45);
+    box-shadow:0 0 34px rgba(56,189,248,.28), 0 12px 30px rgba(0,0,0,.6);
+  }
+}
+
+/* ---------------- 横屏（用 Safari 直接打开时） ---------------- */
+@media (orientation:landscape){
+  canvas#game{ max-height:calc(100dvh - 132px); }
+}

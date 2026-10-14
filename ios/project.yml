@@ -1,0 +1,41 @@
+# ============================================================================
+# XcodeGen 配置：等价于手写的 SpaceShooter.xcodeproj/project.pbxproj
+#   用途一：GitHub Actions（macos 运行器）用它生成工程，避免手写工程文件的兼容问题
+#   用途二：本地装了 xcodegen 时，`xcodegen generate` 可重新生成/修复工程文件
+#   未装 xcodegen 也没关系，直接打开 SpaceShooter.xcodeproj 即可。
+# ============================================================================
+name: SpaceShooter
+options:
+  bundleIdPrefix: com.tetris
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "13.0"
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    IPHONEOS_DEPLOYMENT_TARGET: "13.0"
+    CODE_SIGN_STYLE: Automatic
+targets:
+  SpaceShooter:
+    type: application
+    platform: iOS
+    deploymentTarget: "13.0"
+    sources:
+      - path: SpaceShooter
+        excludes:
+          - "Info.plist"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.tetris.spaceshooter
+        PRODUCT_NAME: SpaceShooter
+        MARKETING_VERSION: "1.0"
+        CURRENT_PROJECT_VERSION: "1"
+        GENERATE_INFOPLIST_FILE: NO
+        INFOPLIST_FILE: SpaceShooter/Info.plist
+        TARGETED_DEVICE_FAMILY: "1"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        SWIFT_EMIT_LOC_STRINGS: YES
+        LD_RUNPATH_SEARCH_PATHS:
+          - "$(inherited)"
+          - "@executable_path/Frameworks"

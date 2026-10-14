@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>太空打飞机 · Space Shooter</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="app">
+
+  <header class="topbar">
+    <h1>太空打飞机<span class="dot">·</span><em>SPACE SHOOTER</em></h1>
+    <div class="actions">
+      <label class="switch" title="开启后无需一直按住开火键">
+        <input type="checkbox" id="chkAuto" checked />
+        <span>自动开火</span>
+      </label>
+      <button id="btnSound" class="ghost-btn" type="button">音效：开</button>
+      <button id="btnPause" class="ghost-btn" type="button">暂停 (P)</button>
+      <button id="btnRestart" class="ghost-btn" type="button">重开 (R)</button>
+    </div>
+  </header>
+
+  <main class="stage">
+    <div class="board-col" id="boardCol">
+    <div class="board-wrap" id="boardWrap">
+      <canvas id="game"></canvas>
+
+      <div class="overlay" id="overlay">
+        <h2 id="ovTitle">太空打飞机</h2>
+        <p id="ovText">击落敌机、拾取补给，一路打到母舰！</p>
+        <div class="keys" id="ovKeys">
+          <span><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd> 移动</span>
+          <span><kbd>空格</kbd> 开火</span>
+          <span><kbd>B</kbd> 核弹</span>
+          <span><kbd>P</kbd> 暂停</span>
+          <span><kbd>R</kbd> 重开</span>
+          <span>鼠标 / 手指拖动也可操纵</span>
+        </div>
+        <button id="ovBtn" class="primary-btn" type="button">开始游戏</button>
+        <p class="tiny" id="ovTiny">按 <kbd>空格</kbd> / <kbd>回车</kbd> 也可以开始</p>
+      </div>
+      </div>
+    </div>
+
+    <aside class="side">
+      <div class="box">
+        <h2>战绩</h2>
+        <div class="stats">
+          <div class="stat"><span>得分</span><b id="uiScore">0</b></div>
+          <div class="stat"><span>最高分</span><b id="uiHigh" class="accent">0</b></div>
+          <div class="stat"><span>波次</span><b id="uiWave">0</b></div>
+          <div class="stat"><span>击落</span><b id="uiKills">0</b></div>
+          <div class="stat"><span>生命</span><b id="uiLives">♥♥♥</b></div>
+          <div class="stat"><span>火力</span><b id="uiWeapon">Lv.1</b></div>
+        </div>
+      </div>
+
+      <div class="box">
+        <h2>玩法提示</h2>
+        <ul class="tips">
+          <li><b>P</b> 火力升级 · <b>S</b> 护盾 · <b>H</b> 回血 · <b>B</b> 核弹</li>
+          <li>连续击落可累积<b>连击倍率</b>，最高 3 倍分数</li>
+          <li>每 5 波出现一艘<b>母舰</b>，击破有巨额分数</li>
+          <li>被击中后会短暂无敌，抓紧走位</li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <div class="touchbar" id="touchbar">
+    <button type="button" data-act="left">◀</button>
+    <button type="button" data-act="right">▶</button>
+    <button type="button" data-act="bomb">核弹 B</button>
+    <button type="button" data-act="pause">暂停</button>
+  </div>
+
+  <footer class="footnote">
+    键盘：<kbd>← ↑ ↓ →</kbd> / <kbd>WASD</kbd> 移动 · <kbd>空格</kbd> 开火 · <kbd>B</kbd> 核弹 · <kbd>P</kbd> 暂停 · <kbd>R</kbd> 重开 ·
+    触屏：在画面上拖动即可移动（自动开火）
+  </footer>
+
+</div>
+<script src="core.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+# ============================================================================
+# 可选：把「太空打飞机-iPhone版.html」发布成网址。
+# 朋友用 iPhone 的 Safari 打开 → 分享 → 添加到主屏幕，就是一个全屏 App 图标，
+# 完全不用签名、不用装任何东西（离线也能玩）。
+# 注意：需要在仓库 Settings → Pages 里把 Source 设为 "GitHub Actions"。
+# ============================================================================
+name: 发布网页版
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 准备站点目录
+        run: |
+          mkdir -p site
+          cp "太空打飞机-iPhone版.html" site/index.html
+          cp apple-touch-icon.png site/ 2>/dev/null || true
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
