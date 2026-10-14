@@ -65,7 +65,7 @@ $ipa = Get-ChildItem -LiteralPath $ex -Recurse -Filter *.ipa | Select-Object -Fi
 if (-not $ipa) { throw '压缩包里没有 .ipa' }
 
 Write-Host '[5/5] 放到项目目录 ...' -ForegroundColor Cyan
-$dest = Join-Path $OutDir '太空打飞机-unsigned.ipa'
+$dest = Join-Path $OutDir 'SpaceShooter-unsigned.ipa'
 Copy-Item -LiteralPath $ipa.FullName -Destination $dest -Force
 Write-Host ("完成：{0}  ({1:N1} MB)" -f $dest, ((Get-Item -LiteralPath $dest).Length / 1MB)) -ForegroundColor Green
 Write-Host '临时目录 .ipa-tmp 可以手动删掉'

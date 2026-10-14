@@ -1,0 +1,5 @@
+# 构建产物、临时文件（不要提交进 git；.ipa 通过 GitHub Releases 分发）
+*.ipa
+.ipa-tmp/
+ios/build/
+ios/ci-logs/
