@@ -12,6 +12,7 @@ on:
     paths-ignore:
       - "**.md"
       - ".gitignore"
+      - "iPhone自签图文教程.html"
   workflow_dispatch:
 
 permissions:

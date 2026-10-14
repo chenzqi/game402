@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>太空打飞机 · iPhone 免费自签图文教程</title>
+<style>
+:root{
+  --bg:#0b1020; --card:#131a2e; --card2:#1b2440; --line:#2b3654;
+  --fg:#e8eeff; --dim:#9aa8c7; --accent:#4f8cff; --ok:#2ecc71; --warn:#ffb020; --bad:#ff5c72;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:16px/1.75 -apple-system,"PingFang SC","Microsoft YaHei",system-ui,sans-serif}
+.wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+header h1{font-size:30px;margin:0 0 6px}
+header .sub{color:var(--dim);margin:0 0 16px;font-size:15px}
+.flow{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 26px}
+.flow span{background:var(--card2);border:1px solid var(--line);border-radius:999px;
+  padding:6px 14px;font-size:14px;color:#cfe0ff}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:22px;margin:0 0 22px}
+.card h2{font-size:21px;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+.card h2 .no{background:var(--accent);color:#fff;border-radius:10px;width:34px;height:34px;
+  display:inline-flex;align-items:center;justify-content:center;font-size:17px;flex:0 0 auto}
+.card h3{font-size:16px;margin:18px 0 6px;color:#cfe0ff}
+.card p,.card li{color:#d7e2ff}
+.tip{background:#132a1d;border-left:4px solid var(--ok);padding:10px 14px;border-radius:8px;margin:14px 0}
+.warnbox{background:#2b2113;border-left:4px solid var(--warn);padding:10px 14px;border-radius:8px;margin:14px 0}
+.badbox{background:#2b1318;border-left:4px solid var(--bad);padding:10px 14px;border-radius:8px;margin:14px 0}
+.two{display:grid;grid-template-columns:minmax(300px,1fr) minmax(300px,1fr);gap:24px;align-items:start}
+@media(max-width:860px){.two{grid-template-columns:1fr}}
+code{background:#0a0f1e;border:1px solid var(--line);border-radius:6px;padding:2px 7px;
+  font-family:Consolas,Monaco,monospace;font-size:14px;color:#9fd0ff}
+.step{display:flex;gap:12px;margin:12px 0}
+.step .n{flex:0 0 26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700}
+.mock{background:#0a0f1e;border:1px solid var(--line);border-radius:12px;padding:14px}
+.mock .cap{text-align:center;color:var(--dim);font-size:13px;margin-top:10px}
+/* Windows 窗口 */
+.win{background:#171f33;border:1px solid #33405f;border-radius:10px;overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.win .bar{background:#222c46;padding:8px 12px;font-size:13px;color:#b9c8e8;display:flex;
+  justify-content:space-between;align-items:center}
+.win .bar .dots span{display:inline-block;width:9px;height:9px;border-radius:50%;
+  background:#3b476a;margin-right:5px}
+.win .body{padding:34px 16px 18px}
+.dropzone{border:2px dashed #4a5a83;border-radius:10px;padding:26px 14px;text-align:center;
+  color:#a9bde6;font-size:14px}
+.dropzone b{color:#fff}
+.row{display:flex;align-items:center;gap:10px;margin-top:24px;font-size:14px}
+.row .lbl{flex:0 0 92px;color:#b9c8e8;text-align:right}
+.fake{flex:1;background:#0d1425;border:1px solid #3a4869;border-radius:8px;padding:8px 10px;
+  color:#e8eeff}
+.fake.sel{display:flex;justify-content:space-between}
+.btn{background:#2a3550;border:none;border-radius:8px;padding:9px 20px;color:#fff;font-size:15px}
+.btn.primary{background:linear-gradient(180deg,#5b95ff,#3f7bff)}
+.right{display:flex;justify-content:flex-end;margin-top:14px}
+.mark{outline:3px solid #ff5c72;outline-offset:3px;border-radius:8px;position:relative}
+.mark::after{content:attr(data-tag);position:absolute;right:-4px;top:-26px;z-index:3;background:#ff5c72;color:#fff;
+  font-size:12px;padding:2px 8px;border-radius:6px;white-space:nowrap}
+</style>
+</head>
+<body><style>
+/* iPhone 模拟 */
+.phone{width:290px;margin:0 auto;background:#0c0c0f;border:9px solid #2a2d33;border-radius:38px;
+  padding:10px 8px 14px;position:relative;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+.phone::before{content:"";position:absolute;top:12px;left:50%;transform:translateX(-50%);
+  width:96px;height:22px;background:#000;border-radius:14px}
+.screen{background:#000;border-radius:26px;overflow:hidden;margin-top:26px}
+.navbar{background:#1c1c1e;color:#fff;text-align:center;font-size:15px;padding:9px 0;
+  border-bottom:1px solid #2c2c2e;position:relative}
+.navbar .back{position:absolute;left:12px;color:#0a84ff;font-size:14px}
+.group{background:#1c1c1e;margin:16px 10px;border-radius:12px;overflow:hidden}
+.gtitle{color:#8e8e93;font-size:12px;margin:16px 22px 6px}
+.irow{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;
+  color:#fff;font-size:14px;border-bottom:1px solid #2c2c2e}
+.irow:last-child{border-bottom:none}
+.irow .chev{color:#5b5b60;font-size:16px}
+.sw{width:50px;height:30px;border-radius:15px;background:#34c759;position:relative;flex:0 0 auto}
+.sw::after{content:"";position:absolute;top:3px;right:3px;width:24px;height:24px;border-radius:50%;
+  background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.sw.off{background:#3a3a3c}
+.sw.off::after{right:auto;left:3px}
+.alert{background:#2c2c2e;border-radius:14px;margin:18px 14px;padding:16px 14px;text-align:center;
+  color:#fff;font-size:14px;box-shadow:0 12px 30px rgba(0,0,0,.4)}
+.alert .title{font-weight:600;margin-bottom:8px}
+.alert .btns{display:flex;gap:10px;margin-top:14px}
+.alert .btns div{flex:1;background:#3a3a3c;border-radius:9px;padding:9px 0;font-size:14px;color:#0a84ff}
+.alert .btns div.hi{background:#0a84ff;color:#fff;font-weight:600}
+.pass{width:100%;background:#1c1c1e;border:1px solid #3a3a3c;border-radius:8px;padding:10px;
+  color:#fff;letter-spacing:4px;text-align:center;font-family:monospace}
+.home{background:linear-gradient(160deg,#1b2a5e,#0d1220);padding:20px 12px;display:grid;
+  grid-template-columns:repeat(4,1fr);gap:16px 10px}
+.appicon{text-align:center;color:#fff;font-size:11px}
+.appicon .ic{width:56px;height:56px;margin:0 auto 6px;border-radius:13px;
+  background:radial-gradient(circle at 50% 30%,#3d6bd8,#0b1230);position:relative;overflow:hidden;
+  box-shadow:0 4px 10px rgba(0,0,0,.5)}
+.appicon .ic::after{content:"";position:absolute;left:50%;top:14px;transform:translateX(-50%);
+  width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;
+  border-bottom:24px solid #cfe0ff}
+.appicon .ic::before{content:"";position:absolute;left:50%;bottom:10px;transform:translateX(-50%);
+  width:16px;height:8px;background:#ffb020;border-radius:0 0 8px 8px}
+.appicon.dim{opacity:.35}
+.tbl{width:100%;border-collapse:collapse;margin-top:12px;font-size:14px}
+.tbl th,.tbl td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+.tbl th{background:#182338}
+.tablewrap{overflow-x:auto}
+.pill{background:#ff5c72;color:#fff;font-size:11px;border-radius:6px;padding:2px 7px;white-space:nowrap}
+.foot{color:var(--dim);font-size:14px;text-align:center;margin-top:30px}
+@media print{
+  body{background:#fff;color:#000}
+  .card,.mock,.phone{box-shadow:none}
+  .two{grid-template-columns:1fr}
+}
+</style><div class="wrap">
+
+<header>
+  <h1>太空打飞机 · iPhone 免费自签图文教程</h1>
+  <p class="sub">iPhone XS Max · iOS 18.7.10 · Windows 电脑 · 0 元 · 第一次约 10~15 分钟</p>
+  <div class="flow">
+    <span>① 装苹果驱动</span><span>② 装 Sideloadly</span><span>③ 手机连电脑</span>
+    <span>④ 填账号点 Start</span><span>⑤ 开开发者模式</span><span>⑥ 信任证书</span>
+    <span>⑦ 开玩</span><span>⑧ 7 天后重复 ④</span>
+  </div>
+</header>
+
+<section class="card">
+  <h2><span class="no">0</span>先回答你的两个问题</h2>
+  <h3>苹果"小号"是什么？</h3>
+  <p>就是<b>另外注册一个 Apple ID</b>（免费，不是开发者账号）。因为签名时要把 Apple ID 的<b>密码</b>交给 Sideloadly 这个第三方工具一次，用小号的话，万一有风险也不会波及你的主号（主号上挂着 iCloud 照片、备忘录、支付方式）。</p>
+  <h3>我能直接用主账号吗？</h3>
+  <p><b>能，技术上完全一样，签名效果没有任何区别。</b>区别只有一条：你愿不愿意把密码交给这个工具一次。</p>
+  <div class="tip">嫌麻烦 → 直接用主号，绝大多数人都这么干。<br>
+  想稳妥 → 花 3 分钟注册小号：电脑浏览器打开 <code>https://account.apple.com/</code> → 创建 Apple ID → 用一个没注册过苹果的邮箱/手机号；地区选中国，付款方式选「无」。<b>不用在手机上登录它</b>，只要在 Sideloadly 里填这个新账号即可。</div>
+  <div class="badbox">不要在手机「设置」里退出当前 Apple ID 去换小号——那会把主号登出，影响 iCloud 数据。</div>
+  <h3>需要开发者账号吗？</h3>
+  <p>不需要。免费 Apple ID 就能签，限制是：<b>7 天有效</b>、<b>同时最多 3 个自签 App</b>、<b>7 天内能创建的 App ID 数量有限</b>。</p>
+</section>
+
+<section class="card">
+  <h2><span class="no">1</span>先备齐这些东西</h2>
+  <ul>
+    <li>Windows 10 / 11 电脑（能上网）</li>
+    <li>一根<b>能传数据</b>的线（原装或认证线；只能充电的线会连不上手机）</li>
+    <li>iPhone XS Max + 锁屏密码</li>
+    <li>一个能登录的 Apple ID（主号或小号）</li>
+    <li>包里已有：<code>D:\ai_test_project\test402-game3\SpaceShooter-unsigned.ipa</code></li>
+  </ul>
+</section><section class="card">
+  <h2><span class="no">2</span>装苹果驱动（最关键的前置）</h2>
+  <div class="two">
+    <div class="mock">
+      <div class="win">
+        <div class="bar"><span>苹果官网 iTunes 下载页</span><span class="dots"><span></span><span></span><span></span></span></div>
+        <div class="body">
+          <div style="font-size:15px;color:#cfe0ff;margin-bottom:10px">iTunes · Windows 版</div>
+          <div class="right" style="margin:0">
+            <span class="btn primary mark" data-tag="点这里">下载 64 位版</span>
+          </div>
+          <div style="color:#7f8db0;font-size:13px;margin-top:12px">需要 macOS 版？点下面的链接</div>
+        </div>
+      </div>
+      <div class="cap">图 1 · 只从苹果官网下载</div>
+    </div>
+    <div>
+      <div class="step"><span class="n">1</span><div>浏览器打开苹果官网下载页：<br><code>https://www.apple.com/cn/itunes/download/</code></div></div>
+      <div class="step"><span class="n">2</span><div>下载并安装 <b>Windows 64 位版</b>（会连带装上 iCloud 和设备驱动）</div></div>
+      <div class="step"><span class="n">3</span><div><b>装完重启一次电脑</b></div></div>
+      <div class="warnbox">⚠️ 绝对不要用 Microsoft Store 里那个 iTunes。官方 FAQ 明确说：装成商店版会出现 <code>&lt;no devices detected&gt;</code>、<code>NP_E_CONN_FAILED</code>、<code>AFC_E_MUX_ERROR</code> 这类"认不到设备"的报错。</div>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="no">3</span>装 Sideloadly 并连手机</h2>
+  <div class="two">
+    <div class="mock">
+      <div class="phone">
+        <div class="screen">
+          <div class="navbar">iPhone</div>
+          <div class="alert">
+            <div class="title">要信任此电脑吗？</div>
+            <div>你的设置和数据将可被访问</div>
+            <div class="btns"><div>不信任</div><div class="hi">信任</div></div>
+          </div>
+          <div style="height:26px"></div>
+        </div>
+      </div>
+      <div class="cap">图 2 · 手机上一定要点「信任」</div>
+    </div>
+    <div>
+      <div class="step"><span class="n">1</span><div>Sideloadly 官网下载 Windows 版：<br><code>https://sideloadly.io/</code> （直链 <code>SideloadlySetup64.exe</code>）</div></div>
+      <div class="step"><span class="n">2</span><div>安装后打开；Windows 提示"未知发布者"→「更多信息 → 仍要运行」</div></div>
+      <div class="step"><span class="n">3</span><div>数据线<b>直插主机 USB 口</b>（别走扩展坞/hub），手机<b>屏幕保持亮着</b></div></div>
+      <div class="step"><span class="n">4</span><div>手机弹窗 → 点「<b>信任</b>」→ 输锁屏密码</div></div>
+      <div class="tip">没弹窗？拔了重插 / 换个 USB 口。之前误点过「不信任」：手机「设置 → 通用 → 传输或还原 iPhone → 还原 → <b>还原位置与隐私</b>」，再重插。</div>
+    </div>
+  </div>
+</section><section class="card">
+  <h2><span class="no">4</span>在 Sideloadly 里签名安装（核心一步）</h2>
+  <div class="two">
+    <div class="mock">
+      <div class="win">
+        <div class="bar"><span>Sideloadly</span><span class="dots"><span></span><span></span><span></span></span></div>
+        <div class="body">
+          <div class="dropzone mark" data-tag="① 拖入 .ipa"><b>把 .ipa 拖到这里</b><br>或点击选择文件</div>
+          <div class="row"><span class="lbl">Device</span><span class="fake sel mark" data-tag="② 选你的手机"><span>iPhone XS Max</span><span>▾</span></span></div>
+          <div class="row"><span class="lbl">Apple ID</span><span class="fake mark" data-tag="③ 填 Apple ID">你的账号</span></div>
+          <div class="row"><span class="lbl">Password</span><span class="fake">••••••••</span></div>
+          <div class="right"><span class="btn primary mark" data-tag="④ 点 Start">Start</span></div>
+        </div>
+      </div>
+      <div class="cap">图 3 · 界面示意（小版本之间位置会略有差别，按文字找）</div>
+    </div>
+    <div>
+      <div class="step"><span class="n">1</span><div>把 <code>SpaceShooter-unsigned.ipa</code> <b>直接拖进</b>窗口</div></div>
+      <div class="step"><span class="n">2</span><div><b>Device</b> 确认选中你的 iPhone</div></div>
+      <div class="step"><span class="n">3</span><div><b>Apple ID</b> 填账号 → 点 <b>Start</b></div></div>
+      <div class="step"><span class="n">4</span><div>弹框要密码 → 填 <b>Apple ID 的正常密码</b>；开了双重认证就再填手机收到的 6 位验证码</div></div>
+      <div class="step"><span class="n">5</span><div>等进度条走完，出现 <code>Done</code> / <code>Installed</code></div></div>
+      <div class="badbox">⚠️ <b>不要用"App 专用密码"</b>。官方 FAQ 写明：App 专用密码只对<b>付费</b>开发者账号、且关闭 anisette 时才有效；免费账号用了会登录失败。</div>
+      <div class="tip">如果 Advanced Options 里有 <b>Auto Refresh（自动刷新）</b> 选项，<b>第一次就勾上</b>：配合下一节的 Wi-Fi 连接，Sideloadly 能在快到期时自动重签，省掉手动折腾。</div>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="no">5</span>打开「开发者模式」（iOS 16 以上必须）</h2>
+  <div class="two">
+    <div class="mock">
+      <div class="phone">
+        <div class="screen">
+          <div class="navbar"><span class="back">‹ 设置</span>隐私与安全性</div>
+          <div class="group">
+            <div class="irow"><span>定位服务</span><span class="chev">›</span></div>
+            <div class="irow"><span>跟踪</span><span class="chev">›</span></div>
+            <div class="irow"><span>分析与改进</span><span class="chev">›</span></div>
+          </div>
+          <div class="group">
+            <div class="irow"><span>开发者模式</span><span style="display:flex;align-items:center;gap:10px"><span class="pill">打开它</span><span class="sw off"></span></span></div>
+          </div>
+          <div style="height:20px"></div>
+        </div>
+      </div>
+      <div class="cap">图 4 · 设置 → 隐私与安全性 → 开发者模式</div>
+    </div>
+    <div>
+      <div class="step"><span class="n">1</span><div>手机「<b>设置 → 隐私与安全性</b>」→ 拉到最下面</div></div>
+      <div class="step"><span class="n">2</span><div>找到「<b>开发者模式</b>」→ 打开开关 → 点「<b>重新启动</b>」</div></div>
+      <div class="step"><span class="n">3</span><div>重启后解锁，会再弹「要开启开发者模式吗？」→ 点「<b>打开</b>」→ 输锁屏密码</div></div>
+      <div class="warnbox">找不到「开发者模式」这一项？<b>正常</b>。它只有手机"见过"开发工具后才会出现——<b>先把第 4 步的安装做完，再回来看</b>。</div>
+    </div>
+  </div>
+</section><section class="card">
+  <h2><span class="no">6</span>信任证书（不做这步，点图标就闪退）</h2>
+  <div class="two">
+    <div class="mock">
+      <div class="phone">
+        <div class="screen">
+          <div class="navbar"><span class="back">‹ 通用</span>VPN 与设备管理</div>
+          <div class="gtitle">开发者 App</div>
+          <div class="group">
+            <div class="irow"><span>Apple Development: abc@icloud.com</span><span style="display:flex;align-items:center;gap:8px"><span class="pill">点它</span><span class="chev">›</span></span></div>
+          </div>
+          <div class="alert" style="margin-top:4px">
+            <div class="title">信任 "Apple Development: abc@icloud.com"？</div>
+            <div class="btns"><div>取消</div><div class="hi">信任</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">图 5 · 设置 → 通用 → VPN 与设备管理 → 开发者 App → 信任</div>
+    </div>
+    <div>
+      <div class="step"><span class="n">1</span><div>手机「<b>设置 → 通用 → VPN 与设备管理</b>」</div></div>
+      <div class="step"><span class="n">2</span><div>找到「<b>开发者 App</b>」栏 → 点 <code>Apple Development: 你的邮箱</code></div></div>
+      <div class="step"><span class="n">3</span><div>点「<b>信任 …</b>」→ 弹窗再点一次「<b>信任</b>」</div></div>
+      <div class="tip">这一步和"开发者模式"是两件事，都要做：<b>开发者模式</b>解决"iOS 16+ 不让装"，<b>信任证书</b>解决"不给运行"。</div>
+    </div>
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="no">7</span>开玩（首次要联网）</h2>
+  <div class="two">
+    <div class="mock">
+      <div class="phone">
+        <div class="screen">
+          <div class="home" style="grid-template-columns:repeat(3,1fr)">
+            <div class="appicon dim"><div class="ic"></div>设置</div>
+            <div class="appicon dim"><div class="ic"></div>相机</div>
+            <div class="appicon dim"><div class="ic"></div>照片</div>
+            <div class="appicon"><div class="ic" style="outline:3px solid #ff5c72;outline-offset:3px"></div>太空打飞机</div>
+            <div class="appicon dim"><div class="ic"></div>微信</div>
+            <div class="appicon dim"><div class="ic"></div>邮件</div>
+          </div>
+        </div>
+      </div>
+      <div class="cap">图 6 · 主屏上出现「太空打飞机」</div>
+    </div>
+    <div>
+      <div class="step"><span class="n">1</span><div>回主屏，点「太空打飞机」图标</div></div>
+      <div class="step"><span class="n">2</span><div><b>第一次启动要联网</b>（苹果要在线核对签名），之后离线也能玩</div></div>
+      <div class="step"><span class="n">3</span><div>竖屏全屏、自动隐藏状态栏；切到后台会自动暂停</div></div>
+      <div class="tip">如果点图标提示「<b>无法验证 App</b>」→ 签名过期，重做第 4 步；<br>如果点图标立刻闪退 → 回到第 6 步信任证书。</div>
+    </div>
+  </div>
+</section><section class="card">
+  <h2><span class="no">8</span>以后重签不用插线（可选，但很值）</h2>
+  <div class="step"><span class="n">1</span><div>电脑打开 <b>iTunes</b> → 连上手机 → 点设备图标 → 「<b>摘要</b>」页 → 勾选「<b>通过 Wi-Fi 与此 iPhone 同步</b>」→ 应用</div></div>
+  <div class="step"><span class="n">2</span><div>以后手机和电脑在<b>同一个 Wi-Fi</b> 下、手机亮着屏，Sideloadly 就能无线识别设备，重签不必插线</div></div>
+  <div class="step"><span class="n">3</span><div>配合第 4 步勾上的 <b>Auto Refresh</b>，Sideloadly 会在 App 快到期时自动重签</div></div>
+</section>
+
+<section class="card">
+  <h2><span class="no">9</span>7 天到期怎么办</h2>
+  <p>到期表现：点图标提示「<b>无法验证 App</b>」或直接闪退。解决办法：<b>重复第 4 步</b>再签一次，2~3 分钟。</p>
+  <div class="badbox">⚠️ <b>千万不要先在手机上删除 App！</b>官方 FAQ 确认：用<b>同一个 Apple ID</b>、<b>同一个包</b>覆盖安装，App 会原地升级、最高分等本地数据保留；一旦手动删除，存档就清空了。</div>
+</section>
+
+<section class="card">
+  <h2><span class="no">10</span>报错速查表</h2>
+  <div class="tablewrap">
+  <table class="tbl">
+    <tr><th>现象</th><th>原因</th><th>怎么修</th></tr>
+    <tr><td>Sideloadly 里没设备 / <code>&lt;no devices detected&gt;</code></td><td>电脑没装官网版 iTunes 驱动，或线只能充电</td><td>做第 2 节（官网版 iTunes+iCloud）→ 重启电脑 → 手机点「信任」→ 换 USB 口/换线</td></tr>
+    <tr><td><code>NP_E_CONN_FAILED</code> / <code>AFC_E_MUX_ERROR</code></td><td>装的是 Microsoft Store 版 iTunes</td><td>卸载它，改装官网版，重启电脑</td></tr>
+    <tr><td><code>LOCKDOWN_E_INVALID_HOST_ID</code></td><td>手机没信任这台电脑</td><td>重插线，手机上点「信任」；或电脑上打开 iTunes 同步一次</td></tr>
+    <tr><td>提示密码错误 / 登录失败</td><td>用了 App 专用密码，或密码输错</td><td>免费账号必须填<b>正常密码</b> + 手机上的 6 位验证码</td></tr>
+    <tr><td><code>Failed to obtain anisette: 500</code></td><td>远程 anisette 服务临时抽风</td><td>等几分钟重试；或 Advanced Settings 里把 Anisette 改成 <b>Local</b></td></tr>
+    <tr><td>提示已达 App 上限</td><td>免费账号<b>同时最多 3 个</b>自签 App</td><td>手机上删掉其它自签 App，再签</td></tr>
+    <tr><td>装完主屏没有图标</td><td>系统缓存</td><td>重启手机</td></tr>
+    <tr><td>点图标闪退 / 「不受信任的开发者」</td><td>没信任证书</td><td>做第 6 节</td></tr>
+    <tr><td>点图标「无法验证 App」</td><td>7 天签名到期</td><td>重做第 4 节</td></tr>
+    <tr><td>提示需要开启「开发者模式」</td><td>iOS 16+ 的要求</td><td>做第 5 节</td></tr>
+    <tr><td>提示无法安装 / 被限制</td><td>屏幕使用时间限制</td><td>设置 → 屏幕使用时间 → 内容和隐私限制 → iTunes 与 App Store 购买项目 → 安装 App → <b>允许</b></td></tr>
+    <tr><td>签名卡很久没动静</td><td>Sideloadly 要联网跟苹果通信，网络被挡</td><td>换网络重试，别用公司/校园防火墙网络</td></tr>
+    <tr><td>报 <code>Invalid argument ...ipa</code></td><td>杀毒软件把包隔离/占用了</td><td>把本目录的 .ipa 加进杀毒白名单，重试</td></tr>
+  </table>
+  </div>
+</section>
+
+<section class="card">
+  <h2><span class="no">11</span>备选：爱思助手（全中文界面）</h2>
+  <p>原理完全一样，只是界面中文：装「爱思助手」PC 版（<code>https://www.i4.cn/</code>）→ 手机连电脑 → 「<b>工具箱 → IPA 签名</b>」→ 添加 <code>SpaceShooter-unsigned.ipa</code> → 选「<b>使用 Apple ID 签名</b>」→ 填账号密码 → 开始签名 → 点「<b>安装到设备</b>」。</p>
+  <div class="warnbox">后面的<b>开发者模式（第 5 节）</b>和<b>信任证书（第 6 节）仍然必须做</b>，限制也一样（7 天 / 最多 3 个 App）。</div>
+</section>
+
+<section class="card">
+  <h2><span class="no">✓</span>一张纸速记</h2>
+  <div class="mock" style="font-family:Consolas,Monaco,monospace;font-size:14px;line-height:2;color:#cfe0ff">
+① 装官网版 iTunes（不是商店版）→ 重启电脑<br>
+② 装 Sideloadly<br>
+③ 手机插线 → 手机上点「信任」<br>
+④ Sideloadly：拖入 ipa → 选设备 → 填 Apple ID → Start → 输密码/验证码<br>
+⑤ 手机：设置→隐私与安全性→开发者模式 → 开 → 重启 → 再确认<br>
+⑥ 手机：设置→通用→VPN与设备管理→开发者 App→信任<br>
+⑦ 开玩（首次要联网）<br>
+⑧ 7 天后重复 ④（别先删 App，存档会保留）
+  </div>
+</section>
+
+<p class="foot">配套文件：<code>iPhone免费自签图文教程.md</code>（纯文字版）· <code>iPhone打包安装清单.md</code>（整体流程与打包说明）<br>
+包体校验：<code>SpaceShooter-unsigned.ipa</code> · SHA-256 见 Releases 说明</p>
+
+</div>
+</body>
+</html>
