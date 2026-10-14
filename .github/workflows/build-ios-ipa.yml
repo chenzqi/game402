@@ -2,7 +2,7 @@
 # 推送代码 → GitHub 的 macOS 机器自动把 ios/ 工程打成 .ipa
 #   产物：SpaceShooter-unsigned.ipa（未签名，用 Sideloadly / AltStore / 爱思助手 自签安装）
 #   为什么在云端编：Windows 上没有 Xcode，编不出 iOS 可执行文件。
-#   构建失败时，本工作流会把关键报错行以 ::error:: 形式输出，方便直接定位。
+#   构建产物同时发到 Releases，任何人都能直接下载（Artifacts 必须登录才能下）。
 # ============================================================================
 name: 构建 iOS .ipa
 
@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build-ipa:
@@ -37,7 +37,6 @@ jobs:
       - name: 安装 XcodeGen（可选，失败不致命）
         continue-on-error: true
         run: brew install xcodegen || brew upgrade xcodegen
-
       - name: 构建 Release（先用手写工程；失败则用 XcodeGen 重新生成工程重试）
         working-directory: ios
         shell: bash
@@ -95,7 +94,6 @@ jobs:
           echo "产物目录：$app"
           file "$app/SpaceShooter"
           ls -lh "$app"
-
       - name: 打包成 .ipa
         working-directory: ios
         shell: bash
@@ -114,6 +112,18 @@ jobs:
             || { echo "::error::ipa 里没有可执行文件"; exit 1; }
           echo "ipa 结构自检通过"
 
+      - name: 发布到 Releases（公开直链，无需登录即可下载）
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -uo pipefail
+          gh release create ios-ipa-latest \
+            --title "太空打飞机 iPhone 版（最新 .ipa）" \
+            --notes "未签名 .ipa，用 Sideloadly / AltStore / 爱思助手 自签安装。免费 Apple ID 签名 7 天有效。" \
+            2>/dev/null || true
+          gh release upload ios-ipa-latest ios/build/SpaceShooter-unsigned.ipa --clobber
+          echo "直链：https://github.com/${GITHUB_REPOSITORY}/releases/download/ios-ipa-latest/SpaceShooter-unsigned.ipa"
       - name: 写构建摘要
         if: always()
         working-directory: ios
@@ -123,22 +133,23 @@ jobs:
             echo "## 太空打飞机 · iOS .ipa"
             echo ""
             if [ -f build/SpaceShooter-unsigned.ipa ]; then
-              echo "- 产物：\`ios/build/SpaceShooter-unsigned.ipa\` （$(du -h build/SpaceShooter-unsigned.ipa | cut -f1)）"
-              echo "- 下载：本页底部 **Artifacts → SpaceShooter-ipa**"
+              echo "- 公开直链（无需登录）：https://github.com/${GITHUB_REPOSITORY}/releases/download/ios-ipa-latest/SpaceShooter-unsigned.ipa"
+              echo "- 本页底部 **Artifacts → SpaceShooter-ipa** 也能下载（需登录）"
               echo ""
-              echo "### 装到 iPhone 上（Windows 电脑即可）"
-              echo "1. 电脑装 [Sideloadly](https://sideloadly.io/) + 苹果官方驱动（Apple Devices / iTunes）"
-              echo "2. 手机用数据线连电脑，手机上点『信任此电脑』"
+              echo "### 装到 iPhone（Windows 电脑即可）"
+              echo "1. 电脑装 Sideloadly（sideloadly.io）+ 苹果官方驱动（Apple Devices 或 iTunes）"
+              echo "2. 手机用数据线连电脑，手机上点「信任此电脑」"
               echo "3. 把上面的 .ipa 拖进 Sideloadly，填 Apple ID，点 Start"
-              echo "4. 手机上『设置 → 通用 → VPN与设备管理』信任你的开发者证书"
-              echo "免费 Apple ID 签名 7 天有效，到期用同样的步骤重签一次即可（存档不丢）。"
+              echo "4. 手机上「设置 → 通用 → VPN与设备管理」信任你的开发者证书"
+              echo ""
+              echo "免费 Apple ID 签名 7 天有效，到期用同样步骤重签一次（存档不丢）。"
             else
               echo "## 构建未产出 .ipa"
-              echo "请查看上面的报错，或下载 \`build-logs\` 工件看完整日志。"
+              echo "请看上面的报错，或下载 build-logs 工件看完整日志。"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
 
-      - name: 上传 .ipa（本页底部 Artifacts 下载）
+      - name: 上传 .ipa（本页底部 Artifacts，备用）
         uses: actions/upload-artifact@v4
         with:
           name: SpaceShooter-ipa
