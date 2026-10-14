@@ -165,7 +165,7 @@ powershell -ExecutionPolicy Bypass -File .\fetch-ipa.ps1 -Token ghp_你的GitHub
 | --- | --- |
 | 文件 | `SpaceShooter-unsigned.ipa`（**已经在本目录里**） |
 | 大小 | 257241 字节 |
-| SHA-256 | `32925cba329d4f67c09250e8eb0e0dcbb42241f1e7a28a12ce635a0863a6ddc7` |
+| SHA-256 | `00da3976e1aed2584edf7a49f1a17e66950c39ba5c7c563c74a7158130a18cf7` |
 | 内嵌游戏 | 与仓库里的 `太空打飞机-iPhone版.html` **逐字节一致**（75870 字节） |
 | 可执行文件 | arm64 Mach-O（真机架构），最低系统 iOS 13.0 |
 | 签名状态 | 未签名（由 Sideloadly 用你的 Apple ID 现场签） |
