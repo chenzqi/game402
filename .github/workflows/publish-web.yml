@@ -1,14 +1,22 @@
 # ============================================================================
-# 可选：把「太空打飞机-iPhone版.html」发布成网址。
-# 朋友用 iPhone 的 Safari 打开 → 分享 → 添加到主屏幕，就是一个全屏 App 图标，
-# 完全不用签名、不用装任何东西（离线也能玩）。
-# 注意：需要在仓库 Settings → Pages 里把 Source 设为 "GitHub Actions"。
+# 可选：把「太空打飞机-iPhone版.html」发布成一个网址。
+# 朋友用 iPhone 的 Safari 打开 → 分享 → 添加到主屏幕，就是一个全屏 App 图标。
+# 不用签名、不用装任何东西、离线也能玩（这是最快能玩上的方式）。
+#
+# 需要你先在仓库里做两件事，否则这个工作流会整体跳过（不会报错）：
+#   1. Settings → Pages → Build and deployment → Source 选 "GitHub Actions"
+#   2. Settings → Secrets and variables → Actions → Variables → New variable
+#      名字：PAGES_ENABLED   值：true
 # ============================================================================
 name: 发布网页版
 
 on:
   push:
     branches: [ main, master ]
+    paths:
+      - "太空打飞机-iPhone版.html"
+      - "apple-touch-icon.png"
+      - ".github/workflows/publish-web.yml"
   workflow_dispatch:
 
 permissions:
@@ -22,6 +30,8 @@ concurrency:
 
 jobs:
   deploy:
+    name: 部署到 GitHub Pages
+    if: vars.PAGES_ENABLED == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -34,6 +44,7 @@ jobs:
           mkdir -p site
           cp "太空打飞机-iPhone版.html" site/index.html
           cp apple-touch-icon.png site/ 2>/dev/null || true
+          ls -l site
 
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

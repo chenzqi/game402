@@ -1,6 +1,8 @@
 # ============================================================================
-# 推送代码 → GitHub 的 macOS 机器自动把 iOS 工程打成 .ipa，可在 Actions 页下载
-# 得到的是「未签名 ipa」，用 Sideloadly / AltStore 自签即可装到 iPhone。
+# 推送代码 → GitHub 的 macOS 机器自动把 ios/ 工程打成 .ipa
+#   产物：SpaceShooter-unsigned.ipa（未签名，用 Sideloadly / AltStore / 爱思助手 自签安装）
+#   为什么在云端编：Windows 上没有 Xcode，编不出 iOS 可执行文件。
+#   构建失败时，本工作流会把关键报错行以 ::error:: 形式输出，方便直接定位。
 # ============================================================================
 name: 构建 iOS .ipa
 
@@ -9,53 +11,146 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build-ipa:
     name: 云端构建 .ipa
-    runs-on: macos-14
+    runs-on: macos-15
+    timeout-minutes: 40
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
 
-      - name: 显示工具链版本
+      - name: 环境信息
         run: |
           xcodebuild -version
           sw_vers
+          xcrun --sdk iphoneos --show-sdk-version
+          df -h /
+          echo "node: $(node --version)"
 
-      - name: 安装 XcodeGen
-        run: brew install xcodegen
+      - name: 重新生成内嵌游戏页（保证 App 内的游戏与仓库源码完全一致）
+        run: node build-ios-web.js
 
-      - name: 生成 Xcode 工程
+      - name: 安装 XcodeGen（可选，失败不致命）
+        continue-on-error: true
+        run: brew install xcodegen || brew upgrade xcodegen
+
+      - name: 构建 Release（先用手写工程；失败则用 XcodeGen 重新生成工程重试）
         working-directory: ios
-        run: xcodegen generate
-
-      - name: 构建（不签名）
-        working-directory: ios
+        shell: bash
         run: |
-          xcodebuild \
-            -project SpaceShooter.xcodeproj \
-            -target SpaceShooter \
-            -configuration Release \
-            -sdk iphoneos \
-            SYMROOT=build \
-            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" \
-            build
+          set -uo pipefail
+          mkdir -p ci-logs
+
+          build_once() {
+            local tag="$1"
+            echo "----- xcodebuild [$tag] -----"
+            xcodebuild \
+              -project SpaceShooter.xcodeproj \
+              -target SpaceShooter \
+              -configuration Release \
+              -sdk iphoneos \
+              SYMROOT="$PWD/build" \
+              CODE_SIGNING_ALLOWED=NO \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGN_STYLE=Manual \
+              build 2>&1 | tee "ci-logs/xcodebuild-$tag.log"
+            return "${PIPESTATUS[0]}"
+          }
+
+          ok=0
+          build_once committed && ok=1
+
+          if [ "$ok" -eq 0 ] && command -v xcodegen >/dev/null 2>&1; then
+            echo "::warning::手写工程构建失败，改用 XcodeGen 重新生成工程后重试"
+            xcodegen generate
+            build_once xcodegen && ok=1
+          fi
+
+          if [ "$ok" -eq 0 ]; then
+            echo "::error::两次构建都失败，下面是关键报错行"
+            grep -hE "error:|fatal error|xcodebuild: error|BUILD FAILED|build commands failed|Command .* failed" ci-logs/*.log | tail -n 25 > /tmp/errs.txt || true
+            if [ -s /tmp/errs.txt ]; then
+              while IFS= read -r line; do echo "::error::$line"; done < /tmp/errs.txt
+            else
+              echo "::error::没有匹配到 error: 行，请看 build-logs 工件里的完整日志"
+            fi
+            exit 1
+          fi
+
+          app="$PWD/build/Release-iphoneos/SpaceShooter.app"
+          if [ ! -d "$app" ]; then
+            app="$(find "$PWD/build" -maxdepth 5 -type d -name 'SpaceShooter.app' | head -n 1)"
+          fi
+          if [ ! -d "$app" ]; then
+            echo "::error::构建成功但找不到 SpaceShooter.app"
+            find "$PWD/build" -maxdepth 3 -type d | head -30
+            exit 1
+          fi
+          echo "APP_PATH=$app" >> "$GITHUB_ENV"
+          echo "产物目录：$app"
+          file "$app/SpaceShooter"
+          ls -lh "$app"
 
       - name: 打包成 .ipa
         working-directory: ios
+        shell: bash
         run: |
-          set -e
-          APP="build/Release-iphoneos/SpaceShooter.app"
-          test -d "$APP"
+          set -euo pipefail
+          test -d "$APP_PATH"
+          test -f "$APP_PATH/Game.html" || { echo "::error::App 内缺少内嵌游戏 Game.html"; exit 1; }
           rm -rf build/Payload
           mkdir -p build/Payload
-          cp -R "$APP" build/Payload/
+          cp -R "$APP_PATH" build/Payload/
+          rm -rf build/Payload/SpaceShooter.app/_CodeSignature
           ( cd build && zip -qry SpaceShooter-unsigned.ipa Payload )
           ls -lh build/SpaceShooter-unsigned.ipa
+          unzip -l build/SpaceShooter-unsigned.ipa | sed -n '1,25p'
+          unzip -l build/SpaceShooter-unsigned.ipa | grep -q "Payload/SpaceShooter.app/SpaceShooter$" \
+            || { echo "::error::ipa 里没有可执行文件"; exit 1; }
+          echo "ipa 结构自检通过"
 
-      - name: 上传 .ipa（在 Actions 页面下载）
+      - name: 写构建摘要
+        if: always()
+        working-directory: ios
+        shell: bash
+        run: |
+          {
+            echo "## 太空打飞机 · iOS .ipa"
+            echo ""
+            if [ -f build/SpaceShooter-unsigned.ipa ]; then
+              echo "- 产物：\`ios/build/SpaceShooter-unsigned.ipa\` （$(du -h build/SpaceShooter-unsigned.ipa | cut -f1)）"
+              echo "- 下载：本页底部 **Artifacts → SpaceShooter-ipa**"
+              echo ""
+              echo "### 装到 iPhone 上（Windows 电脑即可）"
+              echo "1. 电脑装 [Sideloadly](https://sideloadly.io/) + 苹果官方驱动（Apple Devices / iTunes）"
+              echo "2. 手机用数据线连电脑，手机上点『信任此电脑』"
+              echo "3. 把上面的 .ipa 拖进 Sideloadly，填 Apple ID，点 Start"
+              echo "4. 手机上『设置 → 通用 → VPN与设备管理』信任你的开发者证书"
+              echo "免费 Apple ID 签名 7 天有效，到期用同样的步骤重签一次即可（存档不丢）。"
+            else
+              echo "## 构建未产出 .ipa"
+              echo "请查看上面的报错，或下载 \`build-logs\` 工件看完整日志。"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: 上传 .ipa（本页底部 Artifacts 下载）
         uses: actions/upload-artifact@v4
         with:
           name: SpaceShooter-ipa
           path: ios/build/SpaceShooter-unsigned.ipa
           if-no-files-found: error
+          retention-days: 30
+
+      - name: 上传构建日志（排查用）
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: ios/ci-logs/
+          if-no-files-found: ignore
+          retention-days: 14
