@@ -365,8 +365,22 @@ code{background:#0a0f1e;border:1px solid var(--line);border-radius:6px;padding:2
     <tr><td>提示无法安装 / 被限制</td><td>屏幕使用时间限制</td><td>设置 → 屏幕使用时间 → 内容和隐私限制 → iTunes 与 App Store 购买项目 → 安装 App → <b>允许</b></td></tr>
     <tr><td>签名卡很久没动静</td><td>Sideloadly 要联网跟苹果通信，网络被挡</td><td>换网络重试，别用公司/校园防火墙网络</td></tr>
     <tr><td>报 <code>Invalid argument ...ipa</code></td><td>杀毒软件把包隔离/占用了</td><td>把本目录的 .ipa 加进杀毒白名单，重试</td></tr>
+    <tr><td><code>Login failed (-22411)</code> / <code>This action cannot be completed at this time</code></td><td>苹果拒绝了这次<b>账号登录</b>（和游戏包无关）</td><td>先做下面「登录被拒 -22411」专节：查账号状态 → 切 Anisette → 换网络</td></tr>
   </table>
   </div>
+</section>
+
+<section class="card">
+  <h2><span class="no">!</span>登录被拒：<code>-22411</code> / This action cannot be completed at this time</h2>
+  <p>这是<b>苹果拒绝了这次账号登录</b>，<b>和我们的 .ipa 完全无关</b>（包已经校验过）。按顺序试，通常第 1~2 步就好。</p>
+  <div class="step"><span class="n">1</span><div><b>确认账号能正常登录</b>：用同一个账号去浏览器登录 <code>https://appleid.apple.com</code>。能进去 = 密码没错；如果提示「账号已锁定 / 需要验证 / 需要重设密码」，<b>先按提示处理完</b>——这通常就是病根。</div></div>
+  <div class="step"><span class="n">2</span><div><b>切一次 Anisette 模式（最有效）</b>：Sideloadly 右上角 <b>齿轮图标 = Advanced Settings</b> → 找到 <b>Anisette</b> → 从 Remote 切成 <b>Local</b>（或反过来切一次）→ 关掉设置窗口 → 重新点 ▶ Start。<br><span style="color:#8fd694">官方更新日志明确写过：本地 Anisette 修掉了 "Unable to login" 这类失败。</span></div></div>
+  <div class="step"><span class="n">3</span><div><b>换网络</b>：关掉 VPN / 加速器 / 代理，或改用手机热点。苹果登录服务器（idmsa / gsa）在国内会偶发被拦，换网络经常立刻就好。</div></div>
+  <div class="step"><span class="n">4</span><div><b>看 2FA 弹框</b>：如果账号开了双重认证，Start 之后应该弹一个 6 位验证码输入框，弹了就填；<b>从不弹</b>说明在更早一步就被拒了（回第 1、2 步）。</div></div>
+  <div class="step"><span class="n">5</span><div><b>让账号"见过"开发者服务</b>：用这个 Apple ID 在浏览器登录一次 <code>https://developer.apple.com</code>（免费账号只登录 + 同意条款，不用付费），然后再重试。</div></div>
+  <div class="step"><span class="n">6</span><div><b>换个账号对比</b>：用你的主号，或新注册一个小号，再签一次。换号能成 → 是原来那个账号的状态问题；换号也不行 → 是电脑/网络/工具的问题（回第 2、3 步）。</div></div>
+  <div class="step"><span class="n">7</span><div><b>换工具</b>：用「爱思助手 → 工具箱 → IPA 签名 → 使用 Apple ID 签名」试同样的账号密码（实现不同，有时能过）。</div></div>
+  <div class="warnbox">还不行 → 打开 Sideloadly 的 <b>Installation Logs</b>（在设置里）或界面下方日志区，把整段日志发我，我看苹果返回的具体原因。</div>
 </section>
 
 <section class="card">
