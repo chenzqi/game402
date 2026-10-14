@@ -199,28 +199,57 @@ code{background:#0a0f1e;border:1px solid var(--line);border-radius:6px;padding:2
   </div>
 </section><section class="card">
   <h2><span class="no">4</span>在 Sideloadly 里签名安装（核心一步）</h2>
+  <p style="color:#9aa8c7;font-size:14px">下面是 <b>Sideloadly v0.70.1 的真实界面布局</b>：<b>左上角装载 .ipa，右上角 ▶ 就是 Start</b>。真正要你操作的只有 ①②③④ 四处。</p>
   <div class="two">
     <div class="mock">
       <div class="win">
-        <div class="bar"><span>Sideloadly</span><span class="dots"><span></span><span></span><span></span></span></div>
-        <div class="body">
-          <div class="dropzone mark" data-tag="① 拖入 .ipa"><b>把 .ipa 拖到这里</b><br>或点击选择文件</div>
-          <div class="row"><span class="lbl">Device</span><span class="fake sel mark" data-tag="② 选你的手机"><span>iPhone XS Max</span><span>▾</span></span></div>
-          <div class="row"><span class="lbl">Apple ID</span><span class="fake mark" data-tag="③ 填 Apple ID">你的账号</span></div>
-          <div class="row"><span class="lbl">Password</span><span class="fake">••••••••</span></div>
-          <div class="right"><span class="btn primary mark" data-tag="④ 点 Start">Start</span></div>
+        <div class="bar">
+          <span>Sideloadly!&nbsp; v0.70.1</span>
+          <span style="display:flex;align-items:center;gap:10px;font-size:15px">
+            <span class="pill">④ 点它 = Start</span>
+            <span style="color:#6ee787">▶</span>
+            <span style="color:#ff5c72;opacity:.45">■</span>
+            <span class="dots"><span></span><span></span><span></span></span>
+          </span>
+        </div>
+        <div class="body" style="padding:20px 16px 14px">
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="flex:0 0 104px">
+              <div class="mark" data-tag="① 装载 .ipa" style="border:2px dashed #4a5a83;border-radius:10px;padding:14px 8px;text-align:center;color:#a9bde6;font-size:13px">
+                <b style="display:block;font-size:20px;color:#fff;margin-bottom:2px">IPA</b>把 .ipa 拖这里
+              </div>
+              <div style="text-align:center;color:#7f8db0;font-size:12px;margin-top:8px">(none) 装载前</div>
+            </div>
+            <div style="flex:1">
+              <div class="row" style="margin-top:10px"><span class="lbl">iDevice</span><span class="fake sel" style="border-color:#3f7bff"><span>chenf4355 (18.7.10) …USB</span><span>▾</span></span></div>
+              <div style="color:#8fd694;font-size:12px;margin:6px 0 0 100px">② 已自动认出你的手机，不用动</div>
+              <div class="row" style="margin-top:22px"><span class="lbl">Apple ID</span><span class="fake">cf_chenfeng2000@163.com</span></div>
+              <div style="color:#8fd694;font-size:12px;margin:6px 0 0 100px">③ 已填好，确认是你的账号</div>
+              <div style="margin-top:20px;background:#1d2740;border:1px solid #3a4869;border-radius:8px;text-align:center;padding:8px;color:#cfe0ff;font-size:13px">Advanced Options</div>
+            </div>
+          </div>
+          <div style="margin-top:16px;color:#63729a;font-size:12.5px;line-height:2">
+            <div>☐ Try to support older iOS versions (7+)&nbsp;&nbsp;&nbsp; ☐ Remove limitation on supported devices</div>
+            <div>☐ Enable File Sharing&nbsp;&nbsp;&nbsp; ☐ Remove App Extensions (PlugIns)</div>
+            <div>☐ Change app name:&nbsp;&nbsp;&nbsp; ☐ Change app version:</div>
+            <div style="color:#8fd694">☑ Use automatic bundle ID &nbsp;←&nbsp; 保持勾选（重签才能覆盖安装、保住存档）</div>
+            <div>☐ Use custom entitlements:</div>
+            <div style="color:#a99bd6">── Tweak Injection ── ☐ Inject dylibs/frameworks &nbsp;←&nbsp; 一律不勾</div>
+          </div>
+          <div style="margin-top:12px;background:#1a2133;border:1px solid #33405f;border-radius:8px;text-align:center;padding:7px;color:#8ea3cc;font-size:12.5px">Add/modify Info.plist fields&nbsp;&nbsp;&nbsp;&nbsp; 0 field changes</div>
         </div>
       </div>
-      <div class="cap">图 3 · 界面示意（小版本之间位置会略有差别，按文字找）</div>
+      <div class="cap">图 3 · 按你实际的 v0.70.1 界面绘制</div>
     </div>
     <div>
-      <div class="step"><span class="n">1</span><div>把 <code>SpaceShooter-unsigned.ipa</code> <b>直接拖进</b>窗口</div></div>
-      <div class="step"><span class="n">2</span><div><b>Device</b> 确认选中你的 iPhone</div></div>
-      <div class="step"><span class="n">3</span><div><b>Apple ID</b> 填账号 → 点 <b>Start</b></div></div>
-      <div class="step"><span class="n">4</span><div>弹框要密码 → 填 <b>Apple ID 的正常密码</b>；开了双重认证就再填手机收到的 6 位验证码</div></div>
-      <div class="step"><span class="n">5</span><div>等进度条走完，出现 <code>Done</code> / <code>Installed</code></div></div>
-      <div class="badbox">⚠️ <b>不要用"App 专用密码"</b>。官方 FAQ 写明：App 专用密码只对<b>付费</b>开发者账号、且关闭 anisette 时才有效；免费账号用了会登录失败。</div>
-      <div class="tip">如果 Advanced Options 里有 <b>Auto Refresh（自动刷新）</b> 选项，<b>第一次就勾上</b>：配合下一节的 Wi-Fi 连接，Sideloadly 能在快到期时自动重签，省掉手动折腾。</div>
+      <div class="step"><span class="n">1</span><div><b>① 装载 .ipa</b>：点左上角写着 <code>IPA</code> 的方块 → 选 <code>SpaceShooter-unsigned.ipa</code>（也可直接把 ipa 拖进窗口）。装载后 <code>(none)</code> 会变成游戏图标。</div></div>
+      <div class="step"><span class="n">2</span><div><b>② 确认设备</b>：<code>iDevice</code> 里显示 <code>chenf4355 (18.7.10) … USB</code> 就说明连上了，不用动</div></div>
+      <div class="step"><span class="n">3</span><div><b>③ 确认账号</b>：<code>Apple ID</code> 已填好，确认是你的账号即可</div></div>
+      <div class="step"><span class="n">4</span><div><b>④ 点右上角 ▶</b>（那就是 Start；红 ■ 是停止，灰色=空闲）</div></div>
+      <div class="step"><span class="n">5</span><div>弹窗填 <b>正常密码</b>；有双重认证再填手机上的 6 位验证码 → 等出现 <code>Done</code></div></div>
+      <div class="warnbox"><b>其它选项全部保持默认：</b><code>Use automatic bundle ID</code> 保持勾选；<code>Tweak Injection</code> 一律不勾；老 iOS 支持、解除设备限制、File Sharing、改名字改版本都不要动。</div>
+      <div class="badbox">⚠️ 密码弹窗里填 <b>Apple ID 的正常密码</b>，<b>不要</b>用「App 专用密码」——官方 FAQ 明确说它只对付费开发者账号有效，免费账号用了会登录失败。</div>
+      <div class="tip">装完如果弹窗问要不要开启<b>自动刷新（Auto Refresh）</b>，勾上——以后快到期它会自动帮你重签。</div>
     </div>
   </div>
 </section>
